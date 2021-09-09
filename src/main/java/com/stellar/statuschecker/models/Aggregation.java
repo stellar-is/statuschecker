@@ -9,5 +9,6 @@ public class Aggregation {
     private int aggregatedItemsCount;
     private int aggregationUnitCapacity;
     private List<String> sntins;
+    private String unitSerialNumber;
 
 }
