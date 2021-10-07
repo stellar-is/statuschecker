@@ -25,21 +25,21 @@ public class JSONParseServiceImpl implements JSONParseService {
                 AggregationUnits aggregationUnits = g.fromJson(contents, AggregationUnits.class);
                 for (Aggregation a : aggregationUnits.getAggregationUnits()) {
                     for (String y : a.getSntins()) {
-                        if(y.contains("'")) {
-                            StringBuffer str = new StringBuffer(y);
-                            str.insert(str.indexOf("'"),"''");
-                            String codeWith = str.toString();
-                            codes.add(codeWith);
-                            if(y.startsWith("01")) {
-                                str.insert(0, "(");
-                                str.insert(3, ")");
-                                str.insert(18, "(");
-                                str.insert(21, ")");
-                                String codeWith1 = str.toString();
-                                codes.add(codeWith1);
+                        if (y.contains("'")) {
+                            y.replaceAll("'", "''");
+                            if (y.startsWith("(01") || y.startsWith("01")) {
+                                StringBuffer sb = new StringBuffer(y);
+                                sb.insert(0, "(");
+                                sb.insert(3, ")");
+                                sb.insert(18, "(");
+                                sb.insert(21, ")");
+                                String code = sb.toString();
+                                transportCodes.add(code);
+                                codes.add(code);
                             }
-                        }else
-                            if (y.startsWith("(01")||y.startsWith("01")) {
+                            codes.add(y);
+                            System.out.println(y);
+                        }else if (y.startsWith("(01") || y.startsWith("01")) {
                             StringBuffer sb = new StringBuffer(y);
                             sb.insert(0, "(");
                             sb.insert(3, ")");
@@ -51,13 +51,15 @@ public class JSONParseServiceImpl implements JSONParseService {
                         } else
                             codes.add(y);
                     }
-                    }
+                        }
+
+
                 } catch(IOException e){
                     e.printStackTrace();
                 }
             }
 
-        return transportCodes;
+        return codes;
 
     }
 
